@@ -1,0 +1,7 @@
+
+build/objs/
+lib/
+*.mp4
+*.jpg
+*.png
+*.flv
