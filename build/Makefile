@@ -1,6 +1,4 @@
 
-ProjDir=/home/zmant/GitHub/MagicMirror
-
 INCLUDE=-I$(ProjDir)/include \
 		-I/usr/include \
 		
@@ -27,11 +25,11 @@ $(ProjDir)/demo:$(ProjDir)/demo.cpp
 $(ProjDir)/lib/libkcf.so:$(objfiles)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LDFLAGS)
 
-$(ProjDir)/build/objs/kcftracker.o:$(ProjDir)/src/kcftracker.cpp
-	$(CXX) -o $@ -c $^ $(CXXFLAGS) $(INCLUDE)
+$(ProjDir)/build/objs/%.o:$(ProjDir)/src/%.cpp $(ProjDir)/build/objs/%.cpp.d
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCLUDE)
 
-$(ProjDir)/build/objs/fhog.o:$(ProjDir)/src/fhog.cpp
-	$(CXX) -o $@ -c $^ $(CXXFLAGS) $(INCLUDE)
+$(ProjDir)/build/objs/%.cpp.d:$(ProjDir)/src/%.cpp
+	$(CXX) $< -MM $(CXXFLAGS) $(INCLUDE) > $@
 
 clean:
 	rm -rf main $(ProjDir)/lib $(ProjDir)/build/objs
