@@ -1,0 +1,3 @@
+[submodule "3rdParty/SeetaFaceEigen"]
+	path = 3rdParty/SeetaFaceEigen
+	url = git@github.com:Itanq/SeetaFaceEngine.git
