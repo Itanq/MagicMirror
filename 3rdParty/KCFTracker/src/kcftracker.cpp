@@ -91,7 +91,6 @@ the use of this software, even if advised of the possibility of such damage.
 // Constructor
 KCFTracker::KCFTracker(bool hog, bool fixed_window, bool multiscale, bool lab)
 {
-
     // Parameters equal in all cases
     lambda = 0.0001;
     padding = 2.5; 

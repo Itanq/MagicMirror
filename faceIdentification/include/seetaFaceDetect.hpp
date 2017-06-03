@@ -26,11 +26,12 @@ class seetaFaceDetector
         ~seetaFaceDetector();
         
         void Initialize();
-        void Detect(const cv::Mat& srcImage);
+        std::vector<cv::Rect> Detect(cv::Mat& srcImage);
 
     private:
-        seeta::FaceDetection*               m_faceDetector;
-        std::vector<seeta::FaceInfo>        m_faceInfo;
+        seeta::FaceDetection*           m_faceDetector;
+        std::vector<cv::Rect>           m_faceDetectRect;
 };
+
 #endif
 
