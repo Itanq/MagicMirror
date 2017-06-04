@@ -32,27 +32,33 @@ void seetaFaceDetector::Initialize()
 
 }
 
-std::vector<cv::Rect> seetaFaceDetector::Detect(cv::Mat& srcImage)
+std::vector<cv::Rect> seetaFaceDetector::Detect(const cv::Mat& srcImage)
 {
+    cv::Mat grayImage;
     if(srcImage.channels() == 3)
-        cv::cvtColor(srcImage, srcImage, cv::COLOR_BGR2GRAY);
+        cv::cvtColor(srcImage, grayImage, cv::COLOR_BGR2GRAY);
+    else
+        grayImage = srcImage;
 
-    assert(srcImage.channels() == 1);
+    assert(grayImage.channels() == 1);
 
     seeta::ImageData detectImage;
-    detectImage.data = srcImage.data;
-    detectImage.width = srcImage.cols;
-    detectImage.height = srcImage.rows;
+    detectImage.data = grayImage.data;
+    detectImage.width = grayImage.cols;
+    detectImage.height = grayImage.rows;
+    detectImage.num_channels = 1;
 
     std::vector<seeta::FaceInfo> faceInfo = m_faceDetector->Detect(detectImage);
 
+    cv::Rect face;
     uint16_t num_face = static_cast<uint16_t>(faceInfo.size());
     for(uint16_t i=0; i<num_face; ++i)
     {
-        m_faceDetectRect[i].x = faceInfo[i].bbox.x;
-        m_faceDetectRect[i].y = faceInfo[i].bbox.y;
-        m_faceDetectRect[i].width = faceInfo[i].bbox.width;
-        m_faceDetectRect[i].height = faceInfo[i].bbox.height;
+        face.x = faceInfo[i].bbox.x;
+        face.y = faceInfo[i].bbox.y;
+        face.width = faceInfo[i].bbox.width;
+        face.height = faceInfo[i].bbox.height;
+        m_faceDetectRect.push_back(face);
     }
     return m_faceDetectRect;
 }

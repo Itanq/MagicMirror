@@ -11,7 +11,6 @@ BuildTempDir=$(ProjDir)/build/objs
 INCLUDE=-I/usr/include \
 		-I$(ProjDir)/include \
 		-I$(3rdparty)/SeetaFaceEigen/FaceDetection/include \
-		-I$(3rdparty)/SeetaFaceEigen/FaceAlignment/include \
 		-I$(3rdparty)/SeetaFaceEigen/FaceIdentification/include
 
 sourcefiles=$(wildcard $(ProjDir)/src/*.cpp)
@@ -19,10 +18,7 @@ objects=$(addprefix $(BuildTempDir)/, $(subst .cpp,.o,$(notdir $(sourcefiles))))
 
 LDFLAGS=-L/usr/lib/x86_64-linux-gnu \
 		-L$(3rdparty)/SeetaFaceEigen/FaceDetection/lib \
-		-L$(3rdparty)/SeetaFaceEigen/FaceAlignment/lib \
-		-L$(3rdparty)/SeetaFaceEigen/FaceIdentification/lib \
-		-lviplnet -lseeta_facedet_lib \
-		-lopencv_core -lopencv_highgui -lopencv_imgproc
+		-l:libstfd.a -lopencv_core -lopencv_highgui -lopencv_imgproc
 
 CXXFLAGS=-Wall -std=c++14 -shared -fPIC
 
@@ -37,18 +33,18 @@ $(ProjDir)/demo:$(ProjDir)/demo.cpp
 	$(CXX) -Wl,-rpath=$(OutLib) -o $@ $< $(INCLUDE) $(LDFLAGS) -L$(OutLib) -lfaceident -std=c++14
 
 $(OutLib)/libfaceident.a:$(objects)
-	$(AR) rcsf $@ $^
+	$(AR) rcsf $@ $(objects)
 
 $(OutLib)/libfaceident.so:$(objects)
-	$(CXX) -o $@ $^ $(LDFLAGS) $(CXXFLAGS)
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LDFLAGS)
 
 $(BuildTempDir)/%.o:$(ProjDir)/src/%.cpp $(ProjDir)/src/%.cpp.d
-	$(CXX) -o $@ -c $< $(INCLUDE) $(CXXFLAGS)
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCLUDE)
 
 $(ProjDir)/src/%.cpp.d:$(ProjDir)/src/%.cpp
-	$(CXX) $< -MM $(INCLUDE) $(CXXFLAGS) > $@
+	$(CXX) $< -MM $(CXXFLAGS) $(INCLUDE) > $@
 
 clean:
-	rm -rf $(ProjDir)/demo $(OutLib)
+	rm -rf $(ProjDir)/demo $(OutLib) $(BuildTempDir)
 
 

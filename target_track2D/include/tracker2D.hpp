@@ -18,13 +18,14 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 
-class Tracker2D : public KCFTracker
+class Tracker2D
 {
     public:
         explicit Tracker2D(bool hog=true, bool fixed_window=true, bool multiscale=true, bool lab=true);
         ~Tracker2D();
 
     private:
+        KCFTracker*      m_pTracker;
         cv::Rect        m_trackRect;
 };
 

@@ -17,5 +17,8 @@ Tracker2D::Tracker2D(bool hog, bool fixed_window, bool multiscale, bool lab)
 
 Tracker2D::~Tracker2D()
 {
-    delete m_pTracker;
+    if(m_pTracker)
+        delete m_pTracker;
 }
+
+
